@@ -8,18 +8,25 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.enes.materialdesignfromgoogle.API.VkontakteAPI;
+import com.example.enes.materialdesignfromgoogle.Model.FacebookService;
+import com.example.enes.materialdesignfromgoogle.Model.User;
+import com.example.enes.materialdesignfromgoogle.Model.UserDAO;
+import com.example.enes.materialdesignfromgoogle.Model.VkService;
 import com.example.enes.materialdesignfromgoogle.R;
 import com.example.enes.materialdesignfromgoogle.Util.Constants;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
+
+import java.util.List;
 
 
 public class VkActivity extends AppCompatActivity {
@@ -29,6 +36,8 @@ public class VkActivity extends AppCompatActivity {
     private VkontakteAPI apiVk;
     private Activity activity;
     private Bitmap bitmap;
+    private User user;
+    private UserDAO userDAO;
     ProgressDialog pd;
 
     @Override
@@ -47,6 +56,23 @@ public class VkActivity extends AppCompatActivity {
         textUserName = findViewById(R.id.txt_vk_nic);
         btn_acivityVk = findViewById(R.id.btn_login_vk);
 
+/*        List<User> list;
+        userDAO = UserDAO.getInstance(this);
+        list = userDAO.getAllUser();
+
+        Log.d(Constants.MyLog, "list size :" + list.size());
+
+        if (list.size()>0) {
+            for (User user1 : list) {
+                if (user1.getService() instanceof VkService){
+                    btn_acivityVk.setText("Выйти");
+                    user = user1;
+                    textUserName.setText(user.getNic());
+                    imageView.setImageBitmap(user.getAvatar());
+                }
+            }
+        }*/
+
         if (VKSdk.isLoggedIn()){
             pd.show();
             btn_acivityVk.setText("Выйти");
@@ -57,7 +83,6 @@ public class VkActivity extends AppCompatActivity {
         }else {
             btn_acivityVk.setText("Войти");
         }
-
         btn_acivityVk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

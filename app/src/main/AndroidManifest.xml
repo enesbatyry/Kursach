@@ -3,6 +3,8 @@
     package="com.example.enes.materialdesignfromgoogle">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".Activities.App"
@@ -46,7 +48,8 @@
             android:exported="true" />
 
         <activity android:name=".Activities.VkActivity" />
-        <activity android:name=".Activities.FacebookActivity"></activity>
+        <activity android:name=".Activities.FacebookActivity" />
+        <activity android:name=".Activities.WordpressActivity"></activity>
     </application>
 
 </manifest>

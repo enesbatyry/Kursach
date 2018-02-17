@@ -18,7 +18,7 @@
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="346dp"
-                android:layout_height="325dp"
+                android:layout_height="279dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/famicon_logo"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="93dp"
+                android:layout_height="142dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
@@ -61,6 +61,19 @@
                     android:layout_marginTop="4dp"
                     android:background="#2196f3"
                     android:text="Facebook"
+                    android:textColor="@color/colorWhite" />
+
+                <Button
+                    android:id="@+id/btn_showActivity_wordpress"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="#2196f3"
+                    android:text="Wordpress"
                     android:textColor="@color/colorWhite" />
 
             </LinearLayout>

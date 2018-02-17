@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.enes.materialdesignfromgoogle.API.VkontakteAPI;
 import com.example.enes.materialdesignfromgoogle.Adapter.ContentAdapter;
+import com.example.enes.materialdesignfromgoogle.Data.RunnableClient;
 import com.example.enes.materialdesignfromgoogle.Model.InfoContent;
 import com.example.enes.materialdesignfromgoogle.Model.InfoContentDAO;
 import com.example.enes.materialdesignfromgoogle.R;
@@ -43,6 +46,7 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     private Button toGroupButton;
     private Button toWallButton;
     private Button btn_fb_wall;
+    private Button btn_wp;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -55,6 +59,10 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     private InfoContent infoContent;
     private List<InfoContent> contentList;
     private VkontakteAPI apiVk;
+
+    private TextView txt_sys, txt_response;
+    private EditText edit_msg, edit_ip, edit_port;
+    private Button btn_send, btn_clear;
 
 
     @Override
@@ -102,7 +110,7 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
                 if (ShareDialog.canShow(ShareLinkContent.class)) {
                     SharePhoto photo = new SharePhoto.Builder()
-                            .setBitmap(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
+                            .setBitmap(infoContent.getImage())
                             .setCaption("My caption for facebook")
                             .build();
                     ShareContent photoContent = new ShareMediaContent.Builder()
@@ -112,6 +120,9 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
+
+        btn_wp = findViewById(R.id.btn_wp);
+        btn_wp.setOnClickListener(this);
 
         infoContentDAO = InfoContentDAO.getInstance(this);
         contentList = infoContentDAO.getContentList();
@@ -124,6 +135,7 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         tv_Title.setText(infoContent.getTitle());
         tv_Message.setText(infoContent.getMessage());
         iv_Image.setImageBitmap(infoContent.getImage());
+        Log.d(Constants.MyLog, "image_name: " + infoContent.getImageFileName());
 
     }
 
@@ -150,6 +162,41 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                 Log.v(Constants.MyLog,"toGroupButton");
                 apiVk.createProgressDialog(this);
                 apiVk.loadPhotoToMyWall(infoContent.getImage(), infoContent.getMessage(),Constants.TO_GROUP);
+                break;
+            }
+            case R.id.btn_wp:{
+                dialogBuilder = new AlertDialog.Builder(this);
+                View view = getLayoutInflater().inflate(R.layout.activity_wordpress, null);
+                txt_sys = view.findViewById(R.id.txt_sys);
+                txt_sys.setText(
+                        System.getProperty("os.arch") + "/"
+                                + System.getProperty("os.name"));
+
+                edit_msg = view.findViewById(R.id.edit_msg);
+                edit_ip = view.findViewById(R.id.edit_ip);
+                edit_port = view.findViewById(R.id.edit_port);
+
+                txt_response = view.findViewById(R.id.txt_response);
+
+
+                btn_send = view.findViewById(R.id.btn_send);
+                btn_send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String msg = infoContent.getImageFileName();
+                        RunnableClient runnableClient
+                                = new RunnableClient(edit_ip.getText().toString(),
+                                Integer.parseInt(edit_port.getText().toString()),
+                                infoContent);
+
+                        Log.d(Constants.MyLog, "onClick: start sender");
+
+                        new Thread(runnableClient).start();
+                    }
+                });
+                dialogBuilder.setView(view);
+                dialog = dialogBuilder.create();
+                dialog.show();
                 break;
             }
         }

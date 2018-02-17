@@ -9,8 +9,8 @@
     <string name="edit_fragment">Edit Fragment</string>
     <string name="settings_fragment">Settings Fragment</string>
     <string name="save">Save</string>
-    <string name="to_wall">VK wall</string>
-    <string name="to_group">VK group</string>
+    <string name="to_wall">VKW</string>
+    <string name="to_group">VKG</string>
     <string name="type_your_message">Type your message</string>
     <string name="auth">Авторизуйтесь</string>
     <string name="login">Войти</string>

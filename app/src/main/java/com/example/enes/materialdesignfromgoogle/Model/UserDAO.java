@@ -30,6 +30,7 @@ public class UserDAO {
     }
 
     public void addUser(User user){
+        if (userList.contains(user)) return;
         db.addUser(user);
         userList.add(user);
     }

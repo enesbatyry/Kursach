@@ -42,7 +42,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + Constants.CONTENT_ID + " STRING PRIMARY KEY,"
                 + Constants.CONTENT_TITLE + " TEXT,"
                 + Constants.CONTENT_TEXT + " TEXT,"
-                + Constants.CONTENT_IMAGE + " BLOB,"
+                + Constants.CONTENT_IMAGE + " TEXT,"
                 + Constants.SHIPPED + " BOOLEAN);";
 
         String CREATE_USER_TABLE = "CREATE TABLE " + Constants.USER_TABLE_NAME + "("
@@ -73,9 +73,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(Constants.CONTENT_TEXT, content.getMessage());
 
 
-        byte[] image = imageUtils.getBitmapAsByteArray(content.getImage());
+        //byte[] image = imageUtils.getBitmapAsByteArray(content.getImage());
 
-        values.put(Constants.CONTENT_IMAGE, image);
+        values.put(Constants.CONTENT_IMAGE, content.getImageFileName());
         values.put(Constants.SHIPPED, content.getShipped());
 
         db.insert(Constants.CONTENT_TABLE_NAME, null, values);
@@ -116,7 +116,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         infoContent.setMessage(cursor.getString(cursor.getColumnIndex(Constants.CONTENT_TEXT)));
 
 
-        byte[] image = cursor.getBlob(cursor.getColumnIndex(Constants.CONTENT_IMAGE));
+        String image = cursor.getString(cursor.getColumnIndex(Constants.CONTENT_IMAGE));
 
         Bitmap bitmap = imageUtils.readImage(image);
         infoContent.setImage(bitmap);
@@ -143,7 +143,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 infoContent.setTitle(cursor.getString(cursor.getColumnIndex(Constants.CONTENT_TITLE)));
                 infoContent.setMessage(cursor.getString(cursor.getColumnIndex(Constants.CONTENT_TEXT)));
 
-                byte[] image = cursor.getBlob(cursor.getColumnIndex(Constants.CONTENT_IMAGE));
+                String image = cursor.getString(cursor.getColumnIndex(Constants.CONTENT_IMAGE));
 
                 Bitmap bitmap = imageUtils.readImage(image);
                 infoContent.setImage(bitmap);
@@ -172,7 +172,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if (cursor.moveToFirst()){
             do{
                 User user = new User();
-                user.setId(cursor.getInt(cursor.getColumnIndex(Constants.USER_ID)));
+               // user.setId(cursor.getInt(cursor.getColumnIndex(Constants.USER_ID)));
                 user.setNic(cursor.getString(cursor.getColumnIndex(Constants.USER_NIC)));
                 byte[] image = cursor.getBlob(cursor.getColumnIndex(Constants.USER_AVATAR));
 

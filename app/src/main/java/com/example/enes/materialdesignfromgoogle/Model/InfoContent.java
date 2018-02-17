@@ -13,6 +13,7 @@ public class InfoContent {
     private String title;
     private String message;
     private Bitmap image;
+    private String imageFileName;
     private byte shipped;
 
 
@@ -65,6 +66,14 @@ public class InfoContent {
 
     public UUID getId() {
         return id;
+    }
+
+    public String getImageFileName() {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
     }
 
     public void setId(UUID id) {

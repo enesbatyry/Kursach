@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.enes.materialdesignfromgoogle.Activities.FacebookActivity;
+import com.example.enes.materialdesignfromgoogle.Activities.WordpressActivity;
 import com.example.enes.materialdesignfromgoogle.R;
 import com.example.enes.materialdesignfromgoogle.Activities.VkActivity;
 
 public class SettingsFragment extends Fragment {
     private Button btn_showActivity_vk;
     private Button btn__showActivity_facebook;
+    private Button btn__showActivity_wordpress;
+
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -44,6 +47,15 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), FacebookActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btn__showActivity_wordpress = view.findViewById(R.id.btn_showActivity_wordpress);
+        btn__showActivity_wordpress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), WordpressActivity.class);
                 startActivity(intent);
             }
         });

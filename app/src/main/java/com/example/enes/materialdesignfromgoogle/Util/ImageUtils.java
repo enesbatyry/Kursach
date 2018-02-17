@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,6 +47,30 @@ public class ImageUtils {
     public Bitmap readImage(byte[] image){
         //File file = new File(context.getFilesDir(), filename);
         return BitmapFactory.decodeByteArray(image,0,image.length);
+    }
+
+    public Bitmap readImage(String fileName){
+        String fullPath = Environment.getExternalStorageDirectory().toString() +"/saved_images";
+        Bitmap thumbnail = null;
+
+// Look for the file on the external storage
+        try {
+                thumbnail = BitmapFactory.decodeFile(fullPath + "/" + fileName);
+        } catch (Exception e) {
+
+        }
+
+// If no file on external storage, look in internal storage
+        if (thumbnail == null) {
+            try {
+                File filePath = context.getFileStreamPath(fileName);
+                FileInputStream fi = new FileInputStream(filePath);
+                thumbnail = BitmapFactory.decodeStream(fi);
+            } catch (Exception ex) {
+
+            }
+        }
+        return thumbnail;
     }
 
 

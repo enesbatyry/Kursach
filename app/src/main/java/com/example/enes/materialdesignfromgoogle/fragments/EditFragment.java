@@ -22,6 +22,7 @@ import com.example.enes.materialdesignfromgoogle.Model.InfoContentDAO;
 import com.example.enes.materialdesignfromgoogle.R;
 import com.example.enes.materialdesignfromgoogle.Util.Constants;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class EditFragment extends Fragment implements View.OnClickListener{
     private ImageView image;
     private Button saveButton;
     private Bitmap bitmap;
+    private String image_path;
 
 
     private DatabaseHandler db;
@@ -100,6 +102,7 @@ public class EditFragment extends Fragment implements View.OnClickListener{
                 String title = textTitle.getText().toString();
                 String message = textInfo.getText().toString();
                 infoContent = new InfoContent(title,message, bitmap);
+                contentLab.saveImage(bitmap,infoContent.getImageFileName());
                 contentLab.addContent(infoContent);
                 Toast.makeText(getContext(), "Saved to Database", Toast.LENGTH_SHORT).show();
                 break;
@@ -117,8 +120,10 @@ public class EditFragment extends Fragment implements View.OnClickListener{
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = data.getData();
                     try {
+                        image_path = selectedImage.getPath();
                         bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                        image.setImageBitmap(bitmap);
+                       // image.setImageBitmap(bitmap);
+                        image.setImageURI(selectedImage);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -53,6 +53,7 @@ public class VkontakteAPI {
     private boolean isAuthorize;
 
     private UserDAO userDAO;
+    private User userVk;
 
     private ProgressDialog pd;
     private static Context context;
@@ -158,8 +159,8 @@ public class VkontakteAPI {
                 if (list.size() > 0) {
                     userName = list.get(0).toString();
                     view.setText(userName);
-                    UserDAO.user.setNic(userName);
-                    UserDAO.user.setService(new VkService());
+                    userVk.setNic(userName);
+                    userVk.setService(new VkService());
                 }else{
                     userName = "Не авторизованы";
                 }
@@ -184,14 +185,15 @@ public class VkontakteAPI {
 
     public String getAvatarImage(final ImageView imageView){
         Log.v(LOG_TAG,"getAvatarImage");
-
+        userVk = new User();
+        userDAO = UserDAO.getInstance(context);
         final VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS,"photo_50,photo_100,photo_200"));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 if (((VKList)response.parsedModel).size()>0) {
-                    VKApiUser user = (VKApiUser) ((VKList) response.parsedModel).get(0);
+                    final VKApiUser user = (VKApiUser) ((VKList) response.parsedModel).get(0);
                     if (user == null) {
                         urlImage = "";
                     } else {
@@ -202,6 +204,8 @@ public class VkontakteAPI {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                         imageView.setImageBitmap(bitmap);
+                                        userVk.setAvatar(bitmap);
+                                        //userDAO.addUser(userVk);
                                     }
 
                                     @Override

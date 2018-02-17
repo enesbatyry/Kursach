@@ -79,7 +79,7 @@
 
             <Button
                 android:id="@+id/toGroupButton"
-                android:layout_width="wrap_content"
+                android:layout_width="69dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:background="#2196f3"
@@ -88,7 +88,7 @@
 
             <Button
                 android:id="@+id/toWallButton"
-                android:layout_width="wrap_content"
+                android:layout_width="62dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:background="#2196f3"
@@ -98,11 +98,20 @@
 
             <Button
                 android:id="@+id/btn_fb_wall"
-                android:layout_width="wrap_content"
+                android:layout_width="62dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:background="#2196f3"
-                android:text="Send to facebook"
+                android:text="FB"
+                android:textColor="#fafbfc" />
+
+            <Button
+                android:id="@+id/btn_wp"
+                android:layout_width="61dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:background="#2196f3"
+                android:text="WP"
                 android:textColor="#fafbfc" />
 
 
