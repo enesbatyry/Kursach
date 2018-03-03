@@ -16,14 +16,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".Activities.MainActivity"
-            android:label="@string/app_name">
+        <activity android:name=".Activities.SliderActivity"
+            android:label="@string/app_name"
+            android:theme="@style/ContentActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.MainActivity"
+            >
+
         </activity>
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
@@ -47,9 +52,21 @@
             android:authorities="com.facebook.app.FacebookContentProvider181563109102651"
             android:exported="true" />
 
+        <receiver android:name=".AlertReciever" />
+        <receiver android:name=".AlarmReceiver" />
+
+
+        <activity android:name=".NewActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activities.VkActivity" />
         <activity android:name=".Activities.FacebookActivity" />
-        <activity android:name=".Activities.WordpressActivity"></activity>
+        <activity android:name=".Activities.WordpressActivity" />
+
     </application>
 
 </manifest>

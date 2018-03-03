@@ -16,7 +16,10 @@ import com.example.enes.materialdesignfromgoogle.Model.VkService;
 import com.example.enes.materialdesignfromgoogle.R;
 import com.example.enes.materialdesignfromgoogle.Util.Constants;
 import com.example.enes.materialdesignfromgoogle.Util.ImageUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     private Context context;
     private ImageUtils imageUtils;
+    private Gson gson;
 
     public DatabaseHandler(Context context) {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
@@ -75,7 +79,15 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         //byte[] image = imageUtils.getBitmapAsByteArray(content.getImage());
 
-        values.put(Constants.CONTENT_IMAGE, content.getImageFileName());
+        gson = new Gson();
+
+        ArrayList<String> inputArray = (ArrayList<String>) content.getImageFileNames();
+
+        String inputString= gson.toJson(inputArray);
+
+        System.out.println("inputString= " + inputString);
+
+        values.put(Constants.CONTENT_IMAGE, inputString);
         values.put(Constants.SHIPPED, content.getShipped());
 
         db.insert(Constants.CONTENT_TABLE_NAME, null, values);
@@ -142,11 +154,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 infoContent.setId(UUID.fromString(cursor.getString(cursor.getColumnIndex(Constants.CONTENT_ID))));
                 infoContent.setTitle(cursor.getString(cursor.getColumnIndex(Constants.CONTENT_TITLE)));
                 infoContent.setMessage(cursor.getString(cursor.getColumnIndex(Constants.CONTENT_TEXT)));
+                gson = new Gson();
 
-                String image = cursor.getString(cursor.getColumnIndex(Constants.CONTENT_IMAGE));
+                String images = cursor.getString(cursor.getColumnIndex(Constants.CONTENT_IMAGE));
+                Type type = new TypeToken<ArrayList<String>>() {}.getType();
 
-                Bitmap bitmap = imageUtils.readImage(image);
-                infoContent.setImage(bitmap);
+                ArrayList<String> finalOutputString = gson.fromJson(images, type);
+                infoContent.setImageFileNames(finalOutputString);
+
+                //Bitmap bitmap = imageUtils.readImage(images);
+                //infoContent.setImage(bitmap);
 
                 //infoContent.setImage( BitmapFactory.decodeByteArray(image, 0, image.length));
 

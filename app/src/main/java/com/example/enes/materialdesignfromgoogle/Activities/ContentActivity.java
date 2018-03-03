@@ -1,28 +1,29 @@
 package com.example.enes.materialdesignfromgoogle.Activities;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.enes.materialdesignfromgoogle.API.VkontakteAPI;
 import com.example.enes.materialdesignfromgoogle.Adapter.ContentAdapter;
+import com.example.enes.materialdesignfromgoogle.Adapter.ImagesCreateAdapter;
 import com.example.enes.materialdesignfromgoogle.Data.RunnableClient;
 import com.example.enes.materialdesignfromgoogle.Model.InfoContent;
 import com.example.enes.materialdesignfromgoogle.Model.InfoContentDAO;
+import com.example.enes.materialdesignfromgoogle.NewActivity;
 import com.example.enes.materialdesignfromgoogle.R;
 import com.example.enes.materialdesignfromgoogle.Util.Constants;
-import com.example.enes.materialdesignfromgoogle.fragments.ContentFragment;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -41,12 +42,14 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
 
     private TextView tv_Title;
     private TextView tv_Message;
-    private ImageView iv_Image;
+   // private ImageView iv_Image;
     private Button btn_deleteContent;
     private Button toGroupButton;
     private Button toWallButton;
     private Button btn_fb_wall;
     private Button btn_wp;
+    private Button btn_date;
+    private RecyclerView recyclerView;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -63,6 +66,8 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     private TextView txt_sys, txt_response;
     private EditText edit_msg, edit_ip, edit_port;
     private Button btn_send, btn_clear;
+
+    private int position;
 
 
     @Override
@@ -93,7 +98,7 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         tv_Title = findViewById(R.id.tv_title);
         tv_Message = findViewById(R.id.tv_message);
 
-        iv_Image = findViewById(R.id.iv_image);
+        //iv_Image = findViewById(R.id.iv_image);
 
         btn_deleteContent = findViewById(R.id.btn_deleteContent);
         btn_deleteContent.setOnClickListener(this);
@@ -103,6 +108,9 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
 
         toWallButton = findViewById(R.id.toWallButton);
         toWallButton.setOnClickListener(this);
+
+        btn_date = findViewById(R.id.btn_date);
+        btn_date.setOnClickListener(this);
 
         btn_fb_wall = findViewById(R.id.btn_fb_wall);
         btn_fb_wall.setOnClickListener(new View.OnClickListener() {
@@ -129,13 +137,24 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
 
         apiVk = VkontakteAPI.getVkontakteApi(this);
         Intent intent = getIntent();
-        int position = intent.getIntExtra("id",-1);
+        position = intent.getIntExtra("id",-1);
         infoContent = contentList.get(position);
 
         tv_Title.setText(infoContent.getTitle());
         tv_Message.setText(infoContent.getMessage());
-        iv_Image.setImageBitmap(infoContent.getImage());
-        Log.d(Constants.MyLog, "image_name: " + infoContent.getImageFileName());
+
+        recyclerView = findViewById(R.id.recyclerView_content_activity);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        List<String> listImages = infoContent.getImageFileNames();
+        List<Bitmap> listBitmaps = infoContentDAO.readImages(listImages);
+        ImagesCreateAdapter adapter = new ImagesCreateAdapter(listBitmaps, this);
+        recyclerView.setAdapter(adapter);
+
+        //iv_Image.setImageBitmap(infoContent.getImage());
+        //Log.d(Constants.MyLog, "image_name: " + infoContent.getImageFileName());
 
     }
 
@@ -154,19 +173,26 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                 if (!VKSdk.isLoggedIn()){createPopup(); return;}
                 Log.v(Constants.MyLog,"toWallButton");
                 apiVk.createProgressDialog(this);
-                apiVk.loadPhotoToMyWall(infoContent.getImage(), infoContent.getMessage(),Constants.TO_WALL);
+                apiVk.loadInfoContents(infoContentDAO.readImages(infoContent.getImageFileNames()), infoContent.getMessage(),Constants.TO_GROUP);
                 break;
             }
             case R.id.toGroupButton:{
                 if (!VKSdk.isLoggedIn()){createPopup(); return;}
                 Log.v(Constants.MyLog,"toGroupButton");
                 apiVk.createProgressDialog(this);
-                apiVk.loadPhotoToMyWall(infoContent.getImage(), infoContent.getMessage(),Constants.TO_GROUP);
+                apiVk.loadInfoContents(infoContentDAO.readImages(infoContent.getImageFileNames()), infoContent.getMessage(),Constants.TO_GROUP);
+                break;
+            }
+            case R.id.btn_date:{
+                Intent intent = new Intent(this, NewActivity.class);
+                intent.putExtra("position", position);
+                startActivity(intent);
                 break;
             }
             case R.id.btn_wp:{
-                dialogBuilder = new AlertDialog.Builder(this);
+                dialogBuilder = new AlertDialog.Builder(ContentActivity.this);
                 View view = getLayoutInflater().inflate(R.layout.activity_wordpress, null);
+
                 txt_sys = view.findViewById(R.id.txt_sys);
                 txt_sys.setText(
                         System.getProperty("os.arch") + "/"
@@ -183,15 +209,18 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                 btn_send.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String msg = infoContent.getImageFileName();
+                        ProgressDialog pd = createProgressDialog("Upload", "Please wait...");
+                        //String msg = infoContent.getImageFileName();
                         RunnableClient runnableClient
-                                = new RunnableClient(edit_ip.getText().toString(),
+                                = new RunnableClient(pd,edit_ip.getText().toString(),
                                 Integer.parseInt(edit_port.getText().toString()),
                                 infoContent);
 
                         Log.d(Constants.MyLog, "onClick: start sender");
-
+                        dialog.cancel();
+                        pd.show();
                         new Thread(runnableClient).start();
+
                     }
                 });
                 dialogBuilder.setView(view);
@@ -221,6 +250,13 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         dialogBuilder.setView(view);
         dialog = dialogBuilder.create();
         dialog.show();
+    }
+    public ProgressDialog createProgressDialog(String title, String message){
+        ProgressDialog pd = new ProgressDialog(ContentActivity.this);
+        pd.setCancelable(false);
+        pd.setTitle(title);
+        pd.setMessage(message);
+        return pd;
     }
 
 }

@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.enes.materialdesignfromgoogle.fragments.ContentFragment"
-    android:layout_marginBottom="60dp">
+    android:layout_marginBottom="50dp"
+    tools:context="com.example.enes.materialdesignfromgoogle.fragments.ContentFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contentRecycleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

@@ -1,19 +1,14 @@
 package com.example.enes.materialdesignfromgoogle.API;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.enes.materialdesignfromgoogle.Activities.ContentActivity;
 import com.example.enes.materialdesignfromgoogle.Model.User;
 import com.example.enes.materialdesignfromgoogle.Model.UserDAO;
 import com.example.enes.materialdesignfromgoogle.Model.VkService;
@@ -22,9 +17,9 @@ import com.example.enes.materialdesignfromgoogle.Util.Constants;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKBatchRequest;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -37,9 +32,10 @@ import com.vk.sdk.api.model.VKPhotoArray;
 import com.vk.sdk.api.model.VKWallPostResult;
 import com.vk.sdk.api.photo.VKImageParameters;
 import com.vk.sdk.api.photo.VKUploadImage;
+import com.vk.sdk.util.VKStringJoiner;
 
-
-import java.util.logging.LogRecord;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Enes on 26/12/2017.
@@ -72,18 +68,18 @@ public class VkontakteAPI {
     }
 
     public void createProgressDialog(Context context){
-        pd = new ProgressDialog(context);
-        pd.setCancelable(false);
+        //pd = new ProgressDialog(context);
+        //pd.setCancelable(false);
     }
 
 
-    public void loadPhotoToMyWall(Bitmap photo, final String message, final String where) {
+    public void loadInfoContent(Bitmap photo, final String message, final String where) {
         Log.v(LOG_TAG,"loadPhotoToMyWall");
 
-        pd.setTitle("Upload");
-        pd.setMessage("Please wait...");
+        //pd.setTitle("Upload");
+        //pd.setMessage("Please wait...");
         //pd.setCancelable(false);
-        pd.show();
+       // pd.show();
 
         int myId = 0;
         switch (where){
@@ -119,6 +115,60 @@ public class VkontakteAPI {
     }
 
 
+    public void loadInfoContents(List<Bitmap> photos, final String message, final String where) {
+        Log.v(LOG_TAG,"loadPhotoToMyWall");
+
+        //pd.setTitle("Upload");
+        //pd.setMessage("Please wait...");
+        //pd.setCancelable(false);
+        // pd.show();
+
+        int myId = 0;
+        switch (where){
+            case Constants.TO_WALL: {
+                myId = getMyId();
+                break;
+            }
+            case Constants.TO_GROUP:{
+                myId = getIdGroup();
+                break;
+            }
+
+        }
+        final VKRequest[] requests = new VKRequest[photos.size()];
+        Log.v(LOG_TAG,"start Request");
+
+        int i = 0;
+        for (Bitmap bmp : photos) {
+            VKRequest request =  VKApi.uploadWallPhotoRequest(new VKUploadImage(bmp,
+                    VKImageParameters.jpgImage(0.9f)), getMyId(), 0);
+            requests[i] = request;
+            ++i;
+        }
+        final int finalMyId = myId;
+
+        final VKApiPhoto[] photoModels = new VKApiPhoto[photos.size()];
+        VKBatchRequest batchRequest = new VKBatchRequest(requests);
+        batchRequest.executeWithListener(new VKBatchRequest.VKBatchRequestListener() {
+            @Override
+            public void onComplete(VKResponse[] responses) {
+                for (int j = 0; j < responses.length; j++) {
+                    VKApiPhoto photoModel = ((VKPhotoArray) responses[j].parsedModel).get(0);
+                    photoModels[j] = photoModel;
+                }
+                makePost(new VKAttachments(photoModels), message, finalMyId);
+                Log.v(LOG_TAG,"start onComplete loadPhotoToMyWall");
+            }
+
+            @Override
+            public void onError(VKError error) {
+
+            }
+        });
+
+
+    }
+
     public void makePost(VKAttachments att, String msg, final int id) {
 
         VKParameters parameters = new VKParameters();
@@ -134,7 +184,35 @@ public class VkontakteAPI {
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 Log.v(LOG_TAG,"start onComplete makePost()");
+                //pd.cancel();
+                Toast.makeText(context,"Complete", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
                 pd.cancel();
+                Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void makePost(VKAttachments[] att, String msg, final int id) {
+
+        VKParameters parameters = new VKParameters();
+        parameters.put(VKApiConst.OWNER_ID, id);
+        parameters.put(VKApiConst.ATTACHMENTS, att);
+        parameters.put(VKApiConst.MESSAGE, msg);
+        VKRequest post = VKApi.wall().post(parameters);
+        post.setModelClass(VKWallPostResult.class);
+        Log.v(LOG_TAG,"makePost");
+
+        post.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                Log.v(LOG_TAG,"start onComplete makePost()");
+                //pd.cancel();
                 Toast.makeText(context,"Complete", Toast.LENGTH_SHORT).show();
             }
 

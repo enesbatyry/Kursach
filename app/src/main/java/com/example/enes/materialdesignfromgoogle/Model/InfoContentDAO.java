@@ -2,6 +2,7 @@ package com.example.enes.materialdesignfromgoogle.Model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import com.example.enes.materialdesignfromgoogle.Data.DatabaseHandler;
@@ -54,24 +55,44 @@ public class InfoContentDAO {
         contentList.add(0,content);
     }
 
-    public void saveImage(Bitmap finalBitmap, String image_name) {
+    public void saveImage(List<Bitmap> finalBitmaps, List<String> image_names) {
 
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/saved_images");
         myDir.mkdirs();
 
-        File file = new File (myDir, image_name);
-        if (file.exists ())
-            file.delete ();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
+        int index = 0;
+        for (String image_name: image_names) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            File file = new File(myDir, image_name);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                finalBitmaps.get(index).compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ++index;
         }
+    }
+
+    public List<Bitmap> readImages(List<String> image_names){
+        String root = Environment.getExternalStorageDirectory().toString();
+        List<Bitmap> listBitmaps = new ArrayList<>();
+        for (int i = 0; i < image_names.size(); i++) {
+            Bitmap bMap = BitmapFactory.decodeFile(root+"/saved_images/" + image_names.get(i));
+            listBitmaps.add(bMap);
+        }
+        return listBitmaps;
+    }
+    public Bitmap readImages(String image_name){
+        String root = Environment.getExternalStorageDirectory().toString();
+        Bitmap bMap = BitmapFactory.decodeFile(root+"/saved_images/" + image_name);
+        return bMap;
     }
 
     public void setContentList(List<InfoContent> contentList) {

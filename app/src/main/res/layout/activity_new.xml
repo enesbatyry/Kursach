@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="#151928">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_margin="5dp">
+
+            <DatePicker
+                android:id="@+id/pickerdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:headerBackground="#2196f3"
+                android:background="#151928"
+                android:numbersBackgroundColor="#fff"
+                android:calendarTextColor="@color/colorWhite"
+                />
+
+            <TimePicker
+                android:id="@+id/pickertime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:headerBackground="#2196f3"
+                android:numbersBackgroundColor="@color/colorWhite"
+                android:numbersInnerTextColor="@color/colorWhite"
+                android:numbersSelectorColor="#2196f3"
+                android:numbersTextColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/setalarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#2196f3"
+                android:text="Set Date"
+                android:textColor="#fff" />
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#151928"
+                android:textColor="#fff"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.enes.materialdesignfromgoogle.Activities.ContentActivity;
 import com.example.enes.materialdesignfromgoogle.Model.InfoContent;
+import com.example.enes.materialdesignfromgoogle.Model.InfoContentDAO;
 import com.example.enes.materialdesignfromgoogle.R;
 import com.example.enes.materialdesignfromgoogle.Util.Constants;
 import com.example.enes.materialdesignfromgoogle.Util.ImageUtils;
@@ -30,6 +32,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
     private Activity context;
     private final int REQUEST_CONTENT = 2;
     private static ContentAdapter contentAdapter;
+    private InfoContentDAO infoContentDAO;
 
     public List<InfoContent> getInfoContentList() {
         return infoContentList;
@@ -41,6 +44,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
         this.context = (Activity) context;
         this.infoContentList = infoContentList;
         contentAdapter = this;
+        infoContentDAO = InfoContentDAO.getInstance(context);
     }
 
     public ContentAdapter(Context context) {
@@ -77,7 +81,15 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
 
         holder.mTitle.setText(title);
         holder.mMessage.setText(message);
-        holder.imageView.setImageBitmap(image);
+
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        holder.recyclerView.setLayoutManager(layoutManager);
+        InfoContent infoContent = infoContentList.get(position);
+        List<String> listImages = infoContent.getImageFileNames();
+        List<Bitmap> listBitmaps = infoContentDAO.readImages(listImages);
+        ImagesCreateAdapter adapter = new ImagesCreateAdapter(listBitmaps, context);
+        holder.recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -90,7 +102,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
 
         public TextView mTitle;
         public TextView mMessage;
-        public ImageView imageView;
+        public RecyclerView recyclerView;
         private Intent intent;
 
 
@@ -98,7 +110,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
             super(itemView);
             mTitle = itemView.findViewById(R.id.title);
             mMessage = itemView.findViewById(R.id.message);
-            imageView = itemView.findViewById(R.id.imageView);
+            recyclerView = itemView.findViewById(R.id.recyclerViewContentFragmentRow);
             intent = new Intent(context, ContentActivity.class);
             itemView.setOnClickListener(this);
         }

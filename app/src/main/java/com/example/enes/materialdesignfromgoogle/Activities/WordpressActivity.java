@@ -1,5 +1,6 @@
 package com.example.enes.materialdesignfromgoogle.Activities;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,11 @@ public class WordpressActivity extends AppCompatActivity {
     private TextView txt_sys, txt_response;
     private EditText edit_msg, edit_ip, edit_port;
     private Button btn_send, btn_clear;
+    private Context context;
+
+    public Context getContext() {
+        return WordpressActivity.this;
+    }
 
     private InfoContent infoContent;
 
@@ -59,7 +65,7 @@ public class WordpressActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //String msg = String.valueOf(edit_msg.getText());
-                String msg = infoContent.getImageFileName();
+               // String msg = infoContent.getImageFileName();
                 String title = infoContent.getTitle();
                 String message = infoContent.getMessage();
 //                if (msg.equals("")){

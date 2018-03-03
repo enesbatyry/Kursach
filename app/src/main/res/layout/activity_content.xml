@@ -27,12 +27,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_image" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_content_activity" />
 
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -46,10 +47,10 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
         android:layout_marginTop="15dp"/>
 
-        <ImageView
-            android:id="@+id/iv_image"
-            android:layout_width="330dp"
-            android:layout_height="288dp"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_content_activity"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -57,80 +58,110 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.492"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            app:srcCompat="@drawable/ic_insert_photo"
+            app:layout_constraintTop_toBottomOf="@+id/horizontScrollView"
             tools:ignore="MissingConstraints" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
+        <HorizontalScrollView
+            android:id="@+id/horizontScrollView"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_margin="10dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints">
 
-
-            <Button
-                android:id="@+id/toGroupButton"
-                android:layout_width="69dp"
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="#2196f3"
-                android:text="@string/to_group"
-                android:textColor="#fafbfc" />
-
-            <Button
-                android:id="@+id/toWallButton"
-                android:layout_width="62dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="#2196f3"
-                android:text="@string/to_wall"
-                android:textColor="#fafbfc" />
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                >
 
 
-            <Button
-                android:id="@+id/btn_fb_wall"
-                android:layout_width="62dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="#2196f3"
-                android:text="FB"
-                android:textColor="#fafbfc" />
+                <Button
+                    android:id="@+id/toGroupButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="#2196f3"
+                    android:text="@string/to_group"
+                    android:textColor="#fafbfc" />
 
-            <Button
-                android:id="@+id/btn_wp"
-                android:layout_width="61dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="#2196f3"
-                android:text="WP"
-                android:textColor="#fafbfc" />
+                <Button
+                    android:id="@+id/toWallButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="#2196f3"
+                    android:text="@string/to_wall"
+                    android:textColor="#fafbfc" />
 
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_fb_wall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="#2196f3"
+                    android:text="Facebook"
+                    android:textColor="#fafbfc" />
+
+                <Button
+                    android:id="@+id/btn_wp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="#2196f3"
+                    android:text="WordPress"
+                    android:textColor="#fafbfc" />
+
+                <Button
+                    android:id="@+id/btn_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="#2196f3"
+                    android:text="Date"
+                    android:textColor="#fafbfc" />
+
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/horizontScrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message"
+            tools:ignore="MissingConstraints">
+
+
+
+        </HorizontalScrollView>
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:layout_margin="10dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_message"
+            app:layout_constraintTop_toBottomOf="@+id/horizontScrollView2"
+            app:layout_constraintVertical_bias="1.0"
             tools:ignore="MissingConstraints">
 
 

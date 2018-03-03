@@ -20,67 +20,64 @@
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="53dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/type_your_message"
             android:inputType="textMultiLine|textImeMultiLine"
             android:lines="15"
             android:textColor=" #f3f3f5"
             android:textColorHint="#f3f3f5"
-            app:layout_constraintBottom_toTopOf="@+id/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textTitle"
-            app:layout_constraintVertical_bias="0.166" />
+            app:layout_constraintTop_toBottomOf="@+id/textTitle" />
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="332dp"
-            android:layout_height="261dp"
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="224dp"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.525"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_insert_photo"
-            tools:ignore="MissingConstraints" />
-
-        <ImageButton
-            android:id="@+id/insertButton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#2196f3"
-            app:layout_constraintBottom_toTopOf="@+id/image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.689"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text"
-            app:layout_constraintVertical_bias="0.816"
-            app:srcCompat="@drawable/ic_insert_photo"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            android:layout_marginRight="8dp">
 
-        <ImageButton
-            android:id="@+id/photoButton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#2196f3"
-            app:layout_constraintBottom_toTopOf="@+id/image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.847"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text"
-            app:layout_constraintVertical_bias="0.811"
-            app:srcCompat="@drawable/ic_photo_camera" />
+            <ImageButton
+                android:id="@+id/insertButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_insert_photo" />
+
+            <ImageButton
+                android:id="@+id/selectButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_attachment_24dp" />
+
+            <ImageButton
+                android:id="@+id/photoButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_photo_camera" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_delete_black_24dp" />
+
+        </LinearLayout>
+
+
 
 
         <EditText
@@ -100,29 +97,92 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/imageRecyclerViewEdit"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:srcCompat="@drawable/ic_insert_photo"
+            tools:ignore="MissingConstraints" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontScrollView"
             android:layout_width="match_parent"
-            android:layout_height="129dp"
-            android:layout_marginBottom="39dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageRecyclerViewEdit">
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:text="Vk wall"
+                    android:textColor="#fafbfc"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Vk group"
+                    android:textColor="#fafbfc"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Facebook"
+                    android:textColor="#fafbfc"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="WordPress"
+                    android:textColor="#fafbfc"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background=" #2196f3"
             android:gravity="center"
             android:orientation="horizontal"
+            android:text="@string/save"
+            android:textColor="#fafbfc"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.513"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="MissingConstraints">
-
-
-            <Button
-                android:id="@+id/saveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background=" #2196f3"
-                android:text="@string/save"
-                android:textColor="#fafbfc" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/horizontScrollView"
+            tools:ignore="MissingConstraints"
+            android:layout_marginRight="8dp" />
 
 
     </android.support.constraint.ConstraintLayout>

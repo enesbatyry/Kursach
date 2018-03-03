@@ -1,10 +1,15 @@
 package com.example.enes.materialdesignfromgoogle.Data;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.example.enes.materialdesignfromgoogle.Activities.ContentActivity;
+import com.example.enes.materialdesignfromgoogle.Activities.WordpressActivity;
 import com.example.enes.materialdesignfromgoogle.Model.InfoContent;
 import com.example.enes.materialdesignfromgoogle.Util.Constants;
+import com.example.enes.materialdesignfromgoogle.Util.DownloadUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,11 +27,13 @@ public class RunnableClient implements Runnable {
     String response = "";
     InfoContent infoContent;
     byte[] imageToServer;
+    ProgressDialog pd;
 
-    public RunnableClient(String addr, int port, InfoContent content) {
+    public RunnableClient(ProgressDialog pd,String addr, int port, InfoContent content) {
         dstAddress = addr;
         dstPort = port;
         infoContent = content;
+        this.pd = pd;
     }
 
     public RunnableClient(String dstAddress, int dstPort,String msgTo, byte[] imageToServer) {
@@ -46,11 +53,11 @@ public class RunnableClient implements Runnable {
             dataOutputStream = new DataOutputStream(
                     socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
-
-            dataOutputStream.writeUTF(infoContent.getImageFileName());
+            Thread.sleep(1000);
+           // dataOutputStream.writeUTF(infoContent.getImageFileName());
             dataOutputStream.writeUTF(infoContent.getTitle());
             dataOutputStream.writeUTF(infoContent.getMessage());
-            FileInputStream fis = new FileInputStream(Environment.getExternalStorageDirectory().toString() +"/saved_images/"+infoContent.getImageFileName());
+            FileInputStream fis = new FileInputStream(Environment.getExternalStorageDirectory().toString() +"/saved_images/");//infoContent.getImageFileName());
             byte[] buffer = new byte[16*1024];
             int read;
             while((read=fis.read(buffer)) >= 0) {
@@ -63,6 +70,7 @@ public class RunnableClient implements Runnable {
 
             dataOutputStream.flush();
             fis.close();
+            pd.cancel();
             dataOutputStream.close();
             Log.d(Constants.MyLog, "sended image ");
 
@@ -71,6 +79,8 @@ public class RunnableClient implements Runnable {
 
         } catch (IOException ex) {
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             /*txt_response.post(new Runnable() {
                 @Override
@@ -104,5 +114,7 @@ public class RunnableClient implements Runnable {
             }
 
         }
+
     }
+
 }

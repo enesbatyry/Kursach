@@ -2,6 +2,8 @@ package com.example.enes.materialdesignfromgoogle.Model;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -13,11 +15,18 @@ public class InfoContent {
     private String title;
     private String message;
     private Bitmap image;
-    private String imageFileName;
+    private List<String> imageFileNames;
     private byte shipped;
 
 
     public InfoContent() {
+    }
+
+
+    public InfoContent(String title, String message, List<String> imageFileNames) {
+        this.title = title;
+        this.message = message;
+        this.imageFileNames = imageFileNames;
     }
 
     public InfoContent(String title, String message, Bitmap image) {
@@ -30,6 +39,7 @@ public class InfoContent {
     public InfoContent(String title, String message) {
         this.title = title;
         this.message = message;
+        id = UUID.randomUUID();
     }
 
     public String getMessage() {
@@ -68,12 +78,21 @@ public class InfoContent {
         return id;
     }
 
-    public String getImageFileName() {
-        return "IMG_" + getId().toString() + ".jpg";
+    public List<String> getImageFileNames(int count)
+    {
+        imageFileNames = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            imageFileNames.add("IMG_" + getId().toString()+ "(" + i + ").jpg");
+        }
+        return imageFileNames;
     }
 
-    public void setImageFileName(String imageFileName) {
-        this.imageFileName = imageFileName;
+    public List<String> getImageFileNames(){
+        return imageFileNames;
+    }
+
+    public void setImageFileNames(List<String> imageFileNames) {
+        this.imageFileNames = imageFileNames;
     }
 
     public void setId(UUID id) {

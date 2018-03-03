@@ -4,17 +4,17 @@
     <item
         android:id="@+id/navigation_list_content"
         android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-        android:title="@string/content"/>
+        android:title="Contents"/>
 
     <item
         android:id="@+id/navigation_edit_content"
         android:icon="@drawable/ic_mode_edit_black_24dp"
-        android:title="@string/edit" />
+        android:title="Create" />
 
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:title="@string/settings" />
+        android:title="Settings" />
 
 
 
